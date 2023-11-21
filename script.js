@@ -46,12 +46,23 @@ function onCellClick(event) {
 
   // Змінюємо гравця - Якщо був Х стане O, і навпаки:
   currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+  // Нічия
+
+  if (!isWinner && historyX.length + historyO.length === 9) {
+    console.log("finish");
+    const instance = basicLightbox.create(`	<h1>Нічия</h1>`, {
+      onClose: () => {
+        clearField();
+      },
+    });
+    instance.show();
+  }
 }
 
-let winningCombination = [];
 function winnerCheck(history) {
+  let winningCombination = [];
   // Якщо хочаб один(some) масив  із виграшних комбінацій повністю (every) includes в historyX або historyO, то є переможець!!!!!
-
   if (
     combinations.some((arr) => arr.every((number) => history.includes(number)))
   ) {
@@ -59,7 +70,7 @@ function winnerCheck(history) {
       arr.every((number) => history.includes(number))
     );
     winningCombination = result[0];
-    console.log(winningCombination);
+    console.log(`winningCombination: ${winningCombination}`);
 
     winningCombination.map(
       (i) =>
