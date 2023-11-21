@@ -48,12 +48,28 @@ function onCellClick(event) {
   currentPlayer = currentPlayer === "X" ? "O" : "X";
 }
 
+let winningCombination = [];
 function winnerCheck(history) {
   // Якщо хочаб один(some) масив  із виграшних комбінацій повністю (every) includes в historyX або historyO, то є переможець!!!!!
 
-  return combinations.some((arr) =>
-    arr.every((number) => history.includes(number))
-  );
+  if (
+    combinations.some((arr) => arr.every((number) => history.includes(number)))
+  ) {
+    result = combinations.filter((arr) =>
+      arr.every((number) => history.includes(number))
+    );
+    winningCombination = result[0];
+    console.log(winningCombination);
+
+    winningCombination.map(
+      (i) =>
+        (content.querySelector(`[data-id='${i}']`).style.backgroundColor =
+          "green")
+    );
+    return true;
+  }
+
+  return false;
 }
 
 function createField() {
