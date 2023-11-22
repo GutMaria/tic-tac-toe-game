@@ -22,7 +22,7 @@ let historyO = [];
 let currentPlayer = "X";
 
 function onCellClick(event) {
-  if (event.target === event.currentTarget || event.target.textContent) {
+  if (event.target === event.currentTarget || event.target.textContent !== "") {
     return;
     // Додати перевірку якщо клітинка зайнята
   }
@@ -41,14 +41,10 @@ function onCellClick(event) {
 
   // якщо є переможець
   if (isWinner) {
-    showWinner();
+    showWinner(currentPlayer);
   }
 
-  // Змінюємо гравця - Якщо був Х стане O, і навпаки:
-  currentPlayer = currentPlayer === "X" ? "O" : "X";
-
   // Нічия
-
   if (!isWinner && historyX.length + historyO.length === 9) {
     console.log("finish");
     const instance = basicLightbox.create(`	<h1>Нічия</h1>`, {
@@ -58,6 +54,9 @@ function onCellClick(event) {
     });
     instance.show();
   }
+
+  // Змінюємо гравця - Якщо був Х стане O, і навпаки:
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
 }
 
 function winnerCheck(history) {
@@ -75,7 +74,7 @@ function winnerCheck(history) {
     winningCombination.map(
       (i) =>
         (content.querySelector(`[data-id='${i}']`).style.backgroundColor =
-          "green")
+          "rgb(65, 230, 65)")
     );
     return true;
   }
@@ -86,7 +85,7 @@ function winnerCheck(history) {
 function createField() {
   let arrayOfCells = [];
   for (let i = 1; i <= 9; i += 1) {
-    const itemEl = document.createElement("li");
+    const itemEl = document.createElement("div");
     itemEl.classList = "item";
     itemEl.setAttribute("data-id", i);
     arrayOfCells.push(itemEl);
@@ -103,21 +102,18 @@ function clearField() {
   createField();
 }
 
-// Створюємо Лайтбокс
-const instance = basicLightbox.create(
-  `
-	<h1>Виграв ${currentPlayer}</h1>
+function showWinner(player) {
+  // Створюємо Лайтбокс
+  const instance = basicLightbox.create(
+    `
+	<h1>Виграв ${player}</h1>
 `,
-  // Додаємо в параметри закриття функцію що очищає поле для гри
-  {
-    onClose: (instance) => {
-      clearField();
-    },
-  }
-);
-
-function showWinner() {
+    // Додаємо в параметри закриття функцію що очищає поле для гри
+    {
+      onClose: (instance) => {
+        clearField();
+      },
+    }
+  );
   instance.show();
 }
-
-// Якщо нічия виводимо повідомлення
